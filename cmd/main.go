@@ -1,11 +1,11 @@
 package main
 
 import (
-	"csvreader"
+	"yamljsonread"
 )
 
 func main() {
-	var c csvreader.Csvreader = &csvreader.HostParser{}
+	var c yamljsonread.Csvreader = &yamljsonread.HostParser{}
 	c.Read("config.json")
 	//fmt.Println(c)
 }
