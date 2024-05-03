@@ -1,11 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"yamljsonread"
 )
 
 func main() {
-	var c yamljsonread.Csvreader = &yamljsonread.HostParser{}
-	c.Read("config.json")
-	//fmt.Println(c)
+	var c yamljsonread.ConfigReader = &yamljsonread.HostParser{}
+	r := c.Read("configs/config.json")
+	fmt.Println(r)
 }
