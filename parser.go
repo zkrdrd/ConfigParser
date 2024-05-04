@@ -1,4 +1,4 @@
-package yamljsonread
+package parser
 
 import (
 	"encoding/json"
@@ -14,11 +14,11 @@ func Read(Filename string, cfg any) error {
 	}
 
 	if err := json.Unmarshal(file, cfg); err == nil {
-		return json.Unmarshal(file, cfg)
+		return nil
 	}
 
 	if err := yaml.Unmarshal(file, cfg); err == nil {
-		return yaml.Unmarshal(file, cfg)
+		return nil
 	}
 
 	return err

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"yamljsonread"
+	parser "yamljsonread"
 )
 
 type HostParser struct {
@@ -12,7 +12,7 @@ type HostParser struct {
 
 func main() {
 	var cfg = &HostParser{}
-	if err := yamljsonread.Read("config/config.json", cfg); err != nil {
+	if err := parser.Read("configs/config.json", cfg); err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println(cfg)

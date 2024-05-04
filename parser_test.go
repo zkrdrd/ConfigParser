@@ -1,10 +1,10 @@
-package yamljsonread_test
+package parser_test
 
 import (
 	"fmt"
 	"sync"
 	"testing"
-	"yamljsonread"
+	parser "yamljsonread"
 )
 
 type HostParser struct {
@@ -48,7 +48,7 @@ func TestRead(t *testing.T) {
 
 				// Проверяем поиск наименьшего числа
 				var cfg = &HostParser{}
-				c := yamljsonread.Read(expect.Values, cfg)
+				c := parser.Read(expect.Values, cfg)
 
 				if expect.Result != fmt.Sprintf("%v", cfg) {
 					t.Error(fmt.Errorf(`result %v != %v`, expect.Result, c))
