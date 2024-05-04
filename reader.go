@@ -2,41 +2,24 @@ package yamljsonread
 
 import (
 	"encoding/json"
-	"fmt"
-	"io"
 	"os"
 
 	"gopkg.in/yaml.v3"
 )
 
-type ConfigReader interface {
-	Read(Filename string) string
-}
+func Read(Filename string, cfg any) error {
+	file, err := os.ReadFile(Filename)
+	if err != nil {
+		return err
+	}
 
-type HostParser struct {
-	Host string `json:"host" yaml:"host"`
-	Port int    `json:"port" yaml:"port"`
-}
+	if err := json.Unmarshal(file, cfg); err == nil {
+		return json.Unmarshal(file, cfg)
+	}
 
-func (cfg *HostParser) Read(Filename string) string {
-	file, err := os.Open(Filename)
-	if err != nil {
-		return fmt.Sprintf("%v", err)
+	if err := yaml.Unmarshal(file, cfg); err == nil {
+		return yaml.Unmarshal(file, cfg)
 	}
-	defer file.Close()
-	value, err := io.ReadAll(file)
-	if err != nil {
-		return fmt.Sprintf("%v", err)
-	}
-	err = json.Unmarshal(value, &cfg)
-	if err != nil {
-		err := yaml.Unmarshal(value, &cfg)
-		if err != nil {
-			return fmt.Sprintf("%v", err)
-		} else {
-			return fmt.Sprintf("%v", cfg)
-		}
-	} else {
-		return fmt.Sprintf("%v", cfg)
-	}
+
+	return err
 }

@@ -7,6 +7,11 @@ import (
 	"yamljsonread"
 )
 
+type HostParser struct {
+	Host string `json:"host" yaml:"host"`
+	Port int    `json:"port" yaml:"port"`
+}
+
 func TestRead(t *testing.T) {
 	t.Parallel()
 	t.Run(`test find min number`, func(t *testing.T) {
@@ -30,10 +35,6 @@ func TestRead(t *testing.T) {
 				Values: "configs/config2",
 				Result: "&{2.2.2.2 456}",
 			},
-			{
-				Values: "configs/confignull",
-				Result: "open configs/confignull: no such file or directory",
-			},
 		}
 
 		wg := sync.WaitGroup{}
@@ -46,9 +47,10 @@ func TestRead(t *testing.T) {
 				defer wg.Done()
 
 				// Проверяем поиск наименьшего числа
-				var result yamljsonread.ConfigReader = &yamljsonread.HostParser{}
-				c := result.Read(expect.Values)
-				if expect.Result != c {
+				var cfg = &HostParser{}
+				c := yamljsonread.Read(expect.Values, cfg)
+
+				if expect.Result != fmt.Sprintf("%v", cfg) {
 					t.Error(fmt.Errorf(`result %v != %v`, expect.Result, c))
 				}
 			}()

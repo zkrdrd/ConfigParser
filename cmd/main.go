@@ -5,8 +5,17 @@ import (
 	"yamljsonread"
 )
 
+type HostParser struct {
+	Host string `json:"host" yaml:"host"`
+	Port int    `json:"port" yaml:"port"`
+}
+
 func main() {
-	var c yamljsonread.ConfigReader = &yamljsonread.HostParser{}
-	r := c.Read("configs/config.json")
-	fmt.Println(r)
+	var cfg = &HostParser{}
+	if err := yamljsonread.Read("config/config.json", cfg); err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(cfg)
+	}
+
 }
