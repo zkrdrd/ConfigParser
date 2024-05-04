@@ -2,24 +2,28 @@ package parser
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 
 	"gopkg.in/yaml.v3"
 )
 
 func Read(Filename string, cfg any) error {
-	file, err := os.ReadFile(Filename)
+	fileData, err := os.ReadFile(Filename)
 	if err != nil {
 		return err
 	}
+	if len(fileData) == 0 {
+		return errors.New("file is empty")
+	}
 
-	if err := json.Unmarshal(file, cfg); err == nil {
+	if err := json.Unmarshal(fileData, cfg); err == nil {
 		return nil
 	}
 
-	if err := yaml.Unmarshal(file, cfg); err == nil {
+	if err := yaml.Unmarshal(fileData, cfg); err == nil {
 		return nil
 	}
 
-	return err
+	return errors.New("parser not found")
 }

@@ -35,6 +35,18 @@ func TestRead(t *testing.T) {
 				Values: "configs/config2",
 				Result: "&{2.2.2.2 456}",
 			},
+			{
+				Values: "configs/noFile",
+				Result: "open configs/noFile: no such file or directory",
+			},
+			{
+				Values: "configs/empty",
+				Result: "file is empty",
+			},
+			{
+				Values: "configs/noFormat.txt",
+				Result: "parser not found",
+			},
 		}
 
 		wg := sync.WaitGroup{}
@@ -49,13 +61,17 @@ func TestRead(t *testing.T) {
 				// Проверяем поиск наименьшего числа
 				var cfg = &HostParser{}
 				c := parser.Read(expect.Values, cfg)
-
-				if expect.Result != fmt.Sprintf("%v", cfg) {
-					t.Error(fmt.Errorf(`result %v != %v`, expect.Result, c))
+				if c != nil {
+					if expect.Result != fmt.Sprintf("%v", c) {
+						t.Error(fmt.Errorf(`result %v != %v`, expect.Result, c))
+					}
+				} else {
+					if expect.Result != fmt.Sprintf("%v", cfg) {
+						t.Error(fmt.Errorf(`result %v != %v`, expect.Result, cfg))
+					}
 				}
 			}()
 		}
-
 		wg.Wait()
 	})
 

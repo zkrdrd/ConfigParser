@@ -12,7 +12,7 @@ type HostParser struct {
 
 func main() {
 	var cfg = &HostParser{}
-	if err := parser.Read("configs/config.json", cfg); err != nil {
+	if err := parser.Read("configs/noFile", cfg); err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println(cfg)
