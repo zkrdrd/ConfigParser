@@ -2,7 +2,6 @@ package parser_test
 
 import (
 	"fmt"
-	"sync"
 	"testing"
 	parser "yamljsonread"
 )
@@ -18,39 +17,39 @@ func TestRead(t *testing.T) {
 		testTable := []struct {
 			Values      string
 			ErrorResult string
-			Result      HostParser
+			Result      *HostParser
 		}{
 			{
 				Values: "configs/config.json",
-				Result: HostParser{
+				Result: &HostParser{
 					Host: "1.1.1.1",
 					Port: 123,
 				},
 			},
 			{
 				Values: "configs/config.yaml",
-				Result: HostParser{
+				Result: &HostParser{
 					Host: "2.2.2.2",
 					Port: 456,
 				},
 			},
 			{
 				Values: "configs/config",
-				Result: HostParser{
+				Result: &HostParser{
 					Host: "1.1.1.1",
 					Port: 123,
 				},
 			},
 			{
 				Values: "configs/config2",
-				Result: HostParser{
+				Result: &HostParser{
 					Host: "2.2.2.2",
 					Port: 456,
 				},
 			},
 			{
-				Values:      "configs/noFile",
-				ErrorResult: "open configs/noFile: no such file or directory",
+				Values:      "configs/notExistFile",
+				ErrorResult: "open configs/notExistFile: no such file or directory",
 			},
 			{
 				Values:      "configs/empty",
@@ -62,28 +61,26 @@ func TestRead(t *testing.T) {
 			},
 		}
 
-		wg := sync.WaitGroup{}
+		var cfg = &HostParser{}
+
 		for _, expect := range testTable {
 
-			expect := expect
-			wg.Add(1)
-
-			go func() {
-				defer wg.Done()
-
-				var cfg = &HostParser{}
-				if resultParse := parser.Read(expect.Values, cfg); resultParse != nil {
-					if expect.ErrorResult != error.Error(resultParse) {
-						t.Error(fmt.Errorf(`result %v != %v`, expect.ErrorResult, resultParse))
-					}
-				} else {
-					if expect.Result != *cfg {
-						t.Error(fmt.Errorf(`result %v != %v`, expect.Result.Host, cfg.Host))
-					}
+			if err := parser.Read(expect.Values, cfg); err != nil {
+				// Проверяем ошибку
+				if expect.ErrorResult != err.Error() {
+					t.Error(fmt.Errorf(`ожидалась другая ошибка %v != %v`, expect.ErrorResult, err))
 				}
-			}()
+				continue
+			}
+
+			if expect.Result.Host != cfg.Host {
+				t.Error(fmt.Errorf(`host is not current want: %s, have: %s`, expect.Result.Host, cfg.Host))
+			}
+
+			if expect.Result.Port != cfg.Port {
+				t.Error(fmt.Errorf(`host is not current want: %d, have: %d`, expect.Result.Port, cfg.Port))
+			}
 		}
-		wg.Wait()
 	})
 
 }
