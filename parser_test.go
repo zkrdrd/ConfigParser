@@ -18,28 +18,35 @@ func TestRead(t *testing.T) {
 		testTable := []struct {
 			Values      string
 			ErrorResult string
-			HostResult  string
-			PortResult  int
+			Result      HostParser
 		}{
 			{
-				Values:     "configs/config.json",
-				HostResult: "1.1.1.1",
-				PortResult: 123,
+				Values: "configs/config.json",
+				Result: HostParser{
+					Host: "1.1.1.1",
+					Port: 123,
+				},
 			},
 			{
-				Values:     "configs/config.yaml",
-				HostResult: "2.2.2.2",
-				PortResult: 456,
+				Values: "configs/config.yaml",
+				Result: HostParser{
+					Host: "2.2.2.2",
+					Port: 456,
+				},
 			},
 			{
-				Values:     "configs/config",
-				HostResult: "1.1.1.1",
-				PortResult: 123,
+				Values: "configs/config",
+				Result: HostParser{
+					Host: "1.1.1.1",
+					Port: 123,
+				},
 			},
 			{
-				Values:     "configs/config2",
-				HostResult: "2.2.2.2",
-				PortResult: 456,
+				Values: "configs/config2",
+				Result: HostParser{
+					Host: "2.2.2.2",
+					Port: 456,
+				},
 			},
 			{
 				Values:      "configs/noFile",
@@ -65,17 +72,13 @@ func TestRead(t *testing.T) {
 				defer wg.Done()
 
 				var cfg = &HostParser{}
-				resultParse := parser.Read(expect.Values, cfg)
-				if resultParse != nil {
-					if expect.ErrorResult != fmt.Sprintf("%v", resultParse) {
-						t.Error(fmt.Errorf(`result %v != %v`, expect.HostResult, resultParse))
+				if resultParse := parser.Read(expect.Values, cfg); resultParse != nil {
+					if expect.ErrorResult != error.Error(resultParse) {
+						t.Error(fmt.Errorf(`result %v != %v`, expect.ErrorResult, resultParse))
 					}
 				} else {
-					if expect.HostResult != cfg.Host {
-						t.Error(fmt.Errorf(`result %v != %v`, expect.HostResult, cfg.Host))
-					}
-					if expect.PortResult != cfg.Port {
-						t.Error(fmt.Errorf(`result %v != %v`, expect.PortResult, cfg.Port))
+					if expect.Result != *cfg {
+						t.Error(fmt.Errorf(`result %v != %v`, expect.Result.Host, cfg.Host))
 					}
 				}
 			}()
