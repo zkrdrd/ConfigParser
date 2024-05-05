@@ -72,9 +72,9 @@ func TestRead(t *testing.T) {
 				defer wg.Done()
 
 				var cfg = &HostParser{}
-				if resultParse := parser.Read(expect.Values, cfg); resultParse != nil {
-					if expect.ErrorResult != error.Error(resultParse) {
-						t.Error(fmt.Errorf(`result %v != %v`, expect.ErrorResult, resultParse))
+				if err := parser.Read(expect.Values, cfg); err != nil {
+					if expect.ErrorResult != error.Error(err) {
+						t.Error(fmt.Errorf(`result %v != %v`, expect.ErrorResult, err))
 					}
 				} else {
 					if expect.Result != *cfg {
