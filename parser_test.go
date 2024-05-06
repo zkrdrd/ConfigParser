@@ -2,6 +2,7 @@ package parser_test
 
 import (
 	"fmt"
+	"io/fs"
 	"testing"
 	parser "yamljsonread"
 )
@@ -16,7 +17,7 @@ func TestRead(t *testing.T) {
 	t.Run(`test pase file`, func(t *testing.T) {
 		testTable := []struct {
 			Values      string
-			ErrorResult string
+			ErrorResult error
 			Result      *HostParser
 		}{
 			{
@@ -49,22 +50,22 @@ func TestRead(t *testing.T) {
 			},
 			{
 				Values:      "configs/noExistFile",
-				ErrorResult: "open configs/noExistFile: no such file or directory",
+				ErrorResult: fs.ErrNotExist,
 			},
 			{
 				Values:      "configs/empty",
-				ErrorResult: "file is empty",
+				ErrorResult: parser.ErrFileIsEmpty,
 			},
 			{
 				Values:      "configs/noFormat.txt",
-				ErrorResult: "parser not found",
+				ErrorResult: parser.ErrParsernotFound,
 			},
 		}
 
 		var cfg = &HostParser{}
 		for _, expect := range testTable {
 			if err := parser.Read(expect.Values, cfg); err != nil {
-				if expect.ErrorResult != error.Error(err) {
+				if expect.ErrorResult != err {
 					t.Error(fmt.Errorf(`another error want %v != %v`, expect.ErrorResult, err))
 				}
 				continue
