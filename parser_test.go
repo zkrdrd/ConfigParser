@@ -69,13 +69,12 @@ func TestRead(t *testing.T) {
 					t.Error(fmt.Errorf(`another error want %v != %v`, expect.ErrorResult, err))
 				}
 				continue
-			} else {
-				if expect.Result.Host != cfg.Host {
-					t.Error(fmt.Errorf(`host is not current want %v != %v`, expect.Result.Host, cfg.Host))
-				}
-				if expect.Result.Port != cfg.Port {
-					t.Error(fmt.Errorf(`port is not current want %v != %v`, expect.Result.Host, cfg.Port))
-				}
+			}
+			if expect.Result.Host != cfg.Host {
+				t.Error(fmt.Errorf(`host is not current want %v != %v`, expect.Result.Host, cfg.Host))
+			}
+			if expect.Result.Port != cfg.Port {
+				t.Error(fmt.Errorf(`port is not current want %v != %v`, expect.Result.Host, cfg.Port))
 			}
 		}
 	})
