@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	parser "github.com/zkrdrd/config-parser"
+	parser "github.com/zkrdrd/ConfigParser"
 )
 
 type HostParser struct {

@@ -1,11 +1,11 @@
-package parser_test
+package ConfigParser_test
 
 import (
 	"fmt"
 	"io/fs"
 	"testing"
 
-	parser "github.com/zkrdrd/config-parser"
+	parser "github.com/zkrdrd/ConfigParser"
 )
 
 type HostParser struct {
