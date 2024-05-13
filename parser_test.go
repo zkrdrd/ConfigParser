@@ -5,7 +5,7 @@ import (
 	"io/fs"
 	"testing"
 
-	parser "github.com/zkrdrd/config-parser.git"
+	parser "github.com/zkrdrd/config-parser"
 )
 
 type HostParser struct {

@@ -1,4 +1,4 @@
-module github.com/zkrdrd/config-parser.git
+module github.com/zkrdrd/config-parser
 
 go 1.22.2
 
