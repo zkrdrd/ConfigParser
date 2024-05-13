@@ -1,4 +1,4 @@
-module yamljsonread
+module github.com/zkrdrd/config-parser.git
 
 go 1.22.2
 

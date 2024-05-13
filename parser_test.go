@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"io/fs"
 	"testing"
-	parser "yamljsonread"
+
+	parser "github.com/zkrdrd/config-parser.git"
 )
 
 type HostParser struct {

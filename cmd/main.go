@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	parser "yamljsonread"
+
+	parser "github.com/zkrdrd/config-parser.git"
 )
 
 type HostParser struct {
