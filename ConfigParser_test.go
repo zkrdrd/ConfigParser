@@ -9,8 +9,8 @@ import (
 )
 
 type HostParser struct {
-	Host string `json:"host" yaml:"host"`
-	Port int    `json:"port" yaml:"port"`
+	Host string `json:"host" yaml:"host" xml:"Host" toml:"host"`
+	Port int    `json:"port" yaml:"port" xml:"Port" toml:"port"`
 }
 
 func TestRead(t *testing.T) {
@@ -19,34 +19,62 @@ func TestRead(t *testing.T) {
 		testTable := []struct {
 			Values      string
 			ErrorResult error
-			Result      *HostParser
+			Result      HostParser
 		}{
 			{
 				Values: "configs/config.json",
-				Result: &HostParser{
+				Result: HostParser{
 					Host: "1.1.1.1",
 					Port: 123,
 				},
 			},
 			{
 				Values: "configs/config.yaml",
-				Result: &HostParser{
+				Result: HostParser{
 					Host: "2.2.2.2",
 					Port: 456,
 				},
 			},
 			{
 				Values: "configs/config",
-				Result: &HostParser{
+				Result: HostParser{
 					Host: "1.1.1.1",
 					Port: 123,
 				},
 			},
 			{
 				Values: "configs/config2",
-				Result: &HostParser{
+				Result: HostParser{
 					Host: "2.2.2.2",
 					Port: 456,
+				},
+			},
+			{
+				Values: "configs/config.xml",
+				Result: HostParser{
+					Host: "3.3.3.3",
+					Port: 789,
+				},
+			},
+			{
+				Values: "configs/config3",
+				Result: HostParser{
+					Host: "3.3.3.3",
+					Port: 789,
+				},
+			},
+			{
+				Values: "configs/config.toml",
+				Result: HostParser{
+					Host: "4.4.4.4",
+					Port: 1234,
+				},
+			},
+			{
+				Values: "configs/config4",
+				Result: HostParser{
+					Host: "4.4.4.4",
+					Port: 1234,
 				},
 			},
 			{

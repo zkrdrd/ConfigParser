@@ -2,10 +2,12 @@ package ConfigParser
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"errors"
 	"io/fs"
 	"os"
 
+	"github.com/BurntSushi/toml"
 	"gopkg.in/yaml.v3"
 )
 
@@ -18,8 +20,10 @@ var (
 )
 
 func init() {
+	parsers = append(parsers, xml.Unmarshal)
 	parsers = append(parsers, json.Unmarshal)
 	parsers = append(parsers, yaml.Unmarshal)
+	parsers = append(parsers, toml.Unmarshal)
 }
 
 func Read(Filename string, cfg any) error {
